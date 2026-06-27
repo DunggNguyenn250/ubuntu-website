@@ -17,7 +17,7 @@ class RoomController extends Controller {
     }
 
     public function index() {
-        $keyword = $this->getInput('search');
+        $keyword = $this->getInput('keyword');
         if ($keyword) {
             $rooms = $this->roomService->searchRooms($keyword);
         } else {

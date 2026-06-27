@@ -114,4 +114,47 @@ class RoomRepository extends Repository {
         }
         return $roomData;
     }
+
+    /**
+     * Tìm phòng đang ở của một sinh viên (theo masv)
+     * Dùng cho API người dùng: getRoom()
+     */
+    public function findByStudent($masv) {
+        $sql = "SELECT p.maphong, p.sophong, p.toa, p.succhua, p.phonghientai, p.gia, p.trangthai,
+                       h.mahopdong, h.batdau, h.hethan, h.trangthai AS trangthai_hd
+                FROM hopdong h
+                INNER JOIN phong p ON h.maphong = p.maphong
+                WHERE h.masv = ? AND h.trangthai = 'Đang Hoạt Động'
+                LIMIT 1";
+        $stmt = $this->db->prepare($sql);
+        $stmt->bind_param('s', $masv);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        $row = $result->fetch_assoc();
+        $stmt->close();
+        return $row ?: null;
+    }
+
+    /**
+     * Lấy toàn bộ lịch sử hợp đồng của một sinh viên (theo masv)
+     * Dùng cho API người dùng: getContracts()
+     */
+    public function getContract($masv) {
+        $sql = "SELECT h.mahopdong, h.masv, h.maphong, h.batdau, h.hethan, h.trangthai,
+                       p.sophong, p.toa, p.gia
+                FROM hopdong h
+                LEFT JOIN phong p ON h.maphong = p.maphong
+                WHERE h.masv = ?
+                ORDER BY h.batdau DESC";
+        $stmt = $this->db->prepare($sql);
+        $stmt->bind_param('s', $masv);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        $rows = [];
+        while ($row = $result->fetch_assoc()) {
+            $rows[] = $row;
+        }
+        $stmt->close();
+        return $rows;
+    }
 }
