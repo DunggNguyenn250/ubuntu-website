@@ -57,5 +57,4 @@ $pageTitle = 'Thông tin Sự cố Của Tôi';
         </div>
     </div>
 </body>
-<p>© 2024 Cổng Thông Tin Ký Túc Xá. All rights reserved.</p>
 </html>
