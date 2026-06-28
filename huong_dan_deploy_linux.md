@@ -79,6 +79,7 @@ sudo systemctl status docker
 ```
 
 Nếu Docker chưa chạy:
+
 ```bash
 sudo systemctl start docker
 sudo systemctl enable docker   # Tự khởi động cùng hệ thống
@@ -155,9 +156,10 @@ Database MySQL vừa tạo sẽ trống. Cần import file SQL:
 
 ```bash
 # Cách 1: Nếu bạn có file .sql trong repo
-docker exec -i ktx_mysql_db mysql \
+sudo docker exec -i ktx_mysql_db mysql \
   -u root -proot_password quanlykytucxa \
-  < ~/webktx/database/quanlykytucxa.sql
+  < ~/ubuntu-website/database/quanlykytucxa.sql
+
 
 # Cách 2: Vào MySQL shell để kiểm tra
 docker exec -it ktx_mysql_db mysql -u root -proot_password
@@ -175,10 +177,10 @@ EXIT;
 
 Mở Chrome/Edge trên Windows và truy cập:
 
-| Mục đích | URL |
-|---|---|
+| Mục đích               | URL                                          |
+| ---------------------- | -------------------------------------------- |
 | 🎓 Giao diện Sinh Viên | `http://192.168.190.128:8080/QuanLyKTX_user` |
-| ⚙️ Hệ thống Admin/API | `http://192.168.190.128:8080/QuanLyKTX_API` |
+| ⚙️ Hệ thống Admin/API  | `http://192.168.190.128:8080/QuanLyKTX_API`  |
 
 ---
 
@@ -237,10 +239,13 @@ cat /etc/apache2/apache2.conf | grep AllowOverride
 ```
 
 Nếu cần sửa, thêm vào **Dockerfile** trước `EXPOSE 80`:
+
 ```dockerfile
 RUN echo '<Directory /var/www/html>\n    AllowOverride All\n    Options Indexes FollowSymLinks\n    Require all granted\n</Directory>' > /etc/apache2/conf-enabled/htaccess.conf
 ```
+
 Rồi build lại:
+
 ```bash
 docker compose down
 docker compose up --build -d

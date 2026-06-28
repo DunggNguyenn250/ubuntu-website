@@ -1,3 +1,106 @@
+-- =====================================================
+-- HỆ THỐNG QUẢN LÝ KÝ TÚC XÁ - DATABASE
+-- File: quanlykytucxa.sql
+-- =====================================================
+
+SET NAMES utf8mb4;
+SET CHARACTER SET utf8mb4;
+SET time_zone = '+07:00';
+
+CREATE DATABASE IF NOT EXISTS quanlykytucxa CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+USE quanlykytucxa;
+
+SET FOREIGN_KEY_CHECKS = 0;
+DROP TABLE IF EXISTS suco;
+DROP TABLE IF EXISTS thanhtoan;
+DROP TABLE IF EXISTS hopdong;
+DROP TABLE IF EXISTS taikhoan_user;
+DROP TABLE IF EXISTS sinhvien;
+DROP TABLE IF EXISTS phong;
+DROP TABLE IF EXISTS taikhoan_admin;
+
+-- =====================================================
+-- TẠO CẤU TRÚC BẢNG
+-- =====================================================
+CREATE TABLE taikhoan_admin (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    username VARCHAR(100) UNIQUE NOT NULL,
+    password VARCHAR(255) NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE sinhvien (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    masv VARCHAR(20) UNIQUE NOT NULL,
+    hoten VARCHAR(100) NOT NULL,
+    lop VARCHAR(20),
+    gioitinh VARCHAR(10),
+    cccd VARCHAR(20),
+    sodienthoai VARCHAR(15),
+    email VARCHAR(100),
+    diachi TEXT,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE taikhoan_user (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    masv VARCHAR(20) UNIQUE NOT NULL,
+    password VARCHAR(255) NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (masv) REFERENCES sinhvien(masv)
+);
+
+CREATE TABLE phong (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    maphong VARCHAR(20) UNIQUE NOT NULL,
+    sophong VARCHAR(10),
+    toa VARCHAR(5),
+    succhua INT DEFAULT 8,
+    phonghientai INT DEFAULT 0,
+    gia DECIMAL(10,2),
+    trangthai VARCHAR(20),
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE hopdong (
+    mahopdong VARCHAR(20) PRIMARY KEY,
+    masv VARCHAR(20),
+    maphong VARCHAR(20),
+    batdau DATE,
+    hethan DATE,
+    trangthai VARCHAR(20),
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (masv) REFERENCES sinhvien(masv),
+    FOREIGN KEY (maphong) REFERENCES phong(maphong)
+);
+
+CREATE TABLE thanhtoan (
+    mathanhtoan INT PRIMARY KEY AUTO_INCREMENT,
+    maphong VARCHAR(20),
+    sotien DECIMAL(10,2),
+    ngaytra DATE,
+    trangthai VARCHAR(20),
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (maphong) REFERENCES phong(maphong)
+);
+
+CREATE TABLE suco (
+    masuco INT PRIMARY KEY AUTO_INCREMENT,
+    maphong VARCHAR(20),
+    mota TEXT,
+    ngaybao DATE,
+    trangthai VARCHAR(20),
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (maphong) REFERENCES phong(maphong)
+);
+
+SET FOREIGN_KEY_CHECKS = 1;
+
+-- =====================================================
+-- DỮ LIỆU MẪU
+-- =====================================================
+
+-- 1. TÀI KHOẢN ADMIN (đăng nhập: admin / admin123)
 -- 1. TÀI KHOẢN ADMIN (đăng nhập: admin / admin123)
 INSERT INTO taikhoan_admin (username, password) VALUES
 ('admin',  'admin123'),
@@ -72,3 +175,14 @@ INSERT INTO suco (maphong, mota, ngaybao, trangthai) VALUES
 ('B201', 'Cửa phòng bị hỏng khóa, không đóng được',        '2026-06-01', 'Đã xử lý'),
 ('A202', 'Điều hoà không lạnh, cần kiểm tra gas',          '2026-06-05', 'Đang xử lý'),
 ('B103', 'Tường bị ẩm mốc sau mưa lớn',                    '2026-06-10', 'Chờ xử lý');
+
+-- =====================================================
+-- KIỂM TRA KẾT QUẢ
+-- =====================================================
+SELECT CONCAT('taikhoan_admin: ', COUNT(*), ' bản ghi') AS ket_qua FROM taikhoan_admin
+UNION ALL SELECT CONCAT('sinhvien: ', COUNT(*), ' bản ghi') FROM sinhvien
+UNION ALL SELECT CONCAT('taikhoan_user: ', COUNT(*), ' bản ghi') FROM taikhoan_user
+UNION ALL SELECT CONCAT('phong: ', COUNT(*), ' bản ghi') FROM phong
+UNION ALL SELECT CONCAT('hopdong: ', COUNT(*), ' bản ghi') FROM hopdong
+UNION ALL SELECT CONCAT('thanhtoan: ', COUNT(*), ' bản ghi') FROM thanhtoan
+UNION ALL SELECT CONCAT('suco: ', COUNT(*), ' bản ghi') FROM suco;
