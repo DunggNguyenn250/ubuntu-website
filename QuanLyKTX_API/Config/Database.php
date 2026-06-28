@@ -11,9 +11,9 @@ class Database {
 
             $host = 'localhost';     // Dùng localhost khi chạy với XAMPP
             $user = 'root';
-            $pass = ''; // Khớp với MYSQL_ROOT_PASSWORD trong docker-compose.yml
+            $pass = '';              // Mật khẩu mặc định của XAMPP thường để trống
             $db   = 'quanlykytucxa';
-            $port = 3307;            // Cổng MySQL của XAMPP (3306 bị chiếm, dùng 3307)
+            $port = 3306;            // Đã đổi từ 3307 về cổng 3306 mặc định
 
             self::$connection = new \mysqli($host, $user, $pass, $db, $port);
 
