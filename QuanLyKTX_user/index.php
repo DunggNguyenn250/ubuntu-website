@@ -9,7 +9,7 @@ session_start();
 
 // Định nghĩa base path
 define('BASE_PATH', __DIR__);
-define('BASE_URL', 'http://localhost/webktx/QuanLyKTX_user/');
+define('BASE_URL', 'http://192.168.190.128:8080/QuanLyKTX_user/');
 
 // Không gọi CSDL nữa (Đã chuyển sang API)
 // require_once BASE_PATH . '/Config/Database.php';

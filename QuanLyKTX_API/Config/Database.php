@@ -9,11 +9,11 @@ class Database {
 
         if (self::$connection === null) {
 
-            $host = 'localhost';     // Dùng localhost khi chạy với XAMPP
+            $host = 'db';           // Tên service trong docker-compose.yml
             $user = 'root';
-            $pass = '';              // Mật khẩu mặc định của XAMPP thường để trống
+            $pass = 'root_password'; // Khớp với MYSQL_ROOT_PASSWORD trong docker-compose.yml
             $db   = 'quanlykytucxa';
-            $port = 3306;            // Đã đổi từ 3307 về cổng 3306 mặc định
+            $port = 3306;
 
             self::$connection = new \mysqli($host, $user, $pass, $db, $port);
 

@@ -13,8 +13,8 @@ spl_autoload_register(function ($class) {
 session_start();
 
 // Define base URL for views
-define('BASE_URL', '/webktx/QuanLyKTX_API/Public/');
-define('PUBLIC_URL', '/webktx/QuanLyKTX_API/Public/');
+define('BASE_URL', '/QuanLyKTX_API/Public/');
+define('PUBLIC_URL', '/QuanLyKTX_API/Public/');
 
 // Tự động nhận diện thư mục gốc để linh hoạt cho mọi môi trường
 $request_uri = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
