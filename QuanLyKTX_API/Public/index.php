@@ -30,7 +30,7 @@ if (strpos($request_uri, $base_dir) === 0) {
 $uri = str_replace('/index.php', '', $uri);
 $uri = trim($uri, '/');
 
-file_put_contents(__DIR__ . '/debug_global.log', "URI Global: $uri, Request URI: " . $_SERVER['REQUEST_URI'] . "\n", FILE_APPEND);
+// file_put_contents(__DIR__ . '/debug_global.log', "URI Global: $uri, Request URI: " . $_SERVER['REQUEST_URI'] . "\n", FILE_APPEND);
 
 if (empty($uri)) {
     // Mặc định chuyển hướng vào Dashboard nếu URL trống
@@ -44,7 +44,7 @@ if (strpos($uri, 'api/') === 0) {
     $method = $_SERVER['REQUEST_METHOD'];
     
     // DEBUG: Ghi lại log để xem chuyện gì đang xảy ra
-    file_put_contents(__DIR__ . '/debug.log', "URI: $uri, Method: $method\n", FILE_APPEND);
+    // file_put_contents(__DIR__ . '/debug.log', "URI: $uri, Method: $method\n", FILE_APPEND);
     
     // Fallback cho form HTML thỉnh thoảng dùng _method=PUT
     if ($method === 'POST' && isset($_POST['_method'])) {
