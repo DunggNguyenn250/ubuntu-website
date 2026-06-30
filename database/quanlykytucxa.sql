@@ -176,6 +176,12 @@ INSERT INTO suco (maphong, mota, ngaybao, trangthai) VALUES
 ('A202', 'Điều hoà không lạnh, cần kiểm tra gas',          '2026-06-05', 'Đang xử lý'),
 ('B103', 'Tường bị ẩm mốc sau mưa lớn',                    '2026-06-10', 'Chờ xử lý');
 
+-- 8. TIỀN DIỆN
+INSERT INTO tiendien (matd, maphong, giadien, ngay, trangthai) VALUES
+('td001', 'P207', '553124', '2026-05-04', 'Chưa thanh toán'),
+('td002', 'P302', '65016', '2026-05-04', 'Chưa thanh toán'),
+('td003', 'P304', '1145203', '2026-05-04', 'Đã thanh toán');
+
 -- =====================================================
 -- KIỂM TRA KẾT QUẢ
 -- =====================================================
