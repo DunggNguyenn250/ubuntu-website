@@ -94,6 +94,16 @@ CREATE TABLE suco (
     FOREIGN KEY (maphong) REFERENCES phong(maphong)
 );
 
+CREATE TABLE tiennuoc (
+    matn INT PRIMARY KEY AUTO_INCREMENT,
+    maphong VARCHAR(20),
+    gianuoc VARCHAR(20),
+    ngaytra DATE,
+    trangthai VARCHAR(20),
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (maphong) REFERENCES phong(maphong)
+);
+
 SET FOREIGN_KEY_CHECKS = 1;
 
 -- =====================================================
