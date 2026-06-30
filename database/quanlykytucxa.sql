@@ -181,6 +181,10 @@ INSERT INTO tiendien (matd, maphong, giadien, ngay, trangthai) VALUES
 ('td001', 'P207', '553124', '2026-05-04', 'Chưa thanh toán'),
 ('td002', 'P302', '65016', '2026-05-04', 'Chưa thanh toán'),
 ('td003', 'P304', '1145203', '2026-05-04', 'Đã thanh toán');
+-- 9. TIỀN NƯỚC
+INSERT INTO tiennuoc (matn, maphong, gianuoc, ngay, trangthai) VALUES
+('tn001', 'P201', '144000', '2026-04-19', 'Chưa thanh toán'),
+('tn002', 'P301', '96000', '2026-05-03', 'Chưa thanh toán');
 
 -- =====================================================
 -- KIỂM TRA KẾT QUẢ
