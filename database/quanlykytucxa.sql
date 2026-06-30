@@ -94,6 +94,10 @@ CREATE TABLE suco (
     FOREIGN KEY (maphong) REFERENCES phong(maphong)
 );
 
+CREATE TABLE tiendien (
+    matd INT PRIMARY KEY AUTO_INCREMENT,
+    maphong VARCHAR(20),
+    giadien VARCHAR(20),
 CREATE TABLE tiennuoc (
     matn INT PRIMARY KEY AUTO_INCREMENT,
     maphong VARCHAR(20),
