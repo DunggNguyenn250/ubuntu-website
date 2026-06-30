@@ -98,6 +98,10 @@ CREATE TABLE tiendien (
     matd INT PRIMARY KEY AUTO_INCREMENT,
     maphong VARCHAR(20),
     giadien VARCHAR(20),
+CREATE TABLE tiennuoc (
+    matn INT PRIMARY KEY AUTO_INCREMENT,
+    maphong VARCHAR(20),
+    gianuoc VARCHAR(20),
     ngaytra DATE,
     trangthai VARCHAR(20),
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
@@ -185,6 +189,16 @@ INSERT INTO suco (maphong, mota, ngaybao, trangthai) VALUES
 ('B201', 'Cửa phòng bị hỏng khóa, không đóng được',        '2026-06-01', 'Đã xử lý'),
 ('A202', 'Điều hoà không lạnh, cần kiểm tra gas',          '2026-06-05', 'Đang xử lý'),
 ('B103', 'Tường bị ẩm mốc sau mưa lớn',                    '2026-06-10', 'Chờ xử lý');
+
+-- 8. TIỀN DIỆN
+INSERT INTO tiendien (matd, maphong, giadien, ngay, trangthai) VALUES
+('td001', 'P207', '553124', '2026-05-04', 'Chưa thanh toán'),
+('td002', 'P302', '65016', '2026-05-04', 'Chưa thanh toán'),
+('td003', 'P304', '1145203', '2026-05-04', 'Đã thanh toán');
+-- 9. TIỀN NƯỚC
+INSERT INTO tiennuoc (matn, maphong, gianuoc, ngay, trangthai) VALUES
+('tn001', 'P201', '144000', '2026-04-19', 'Chưa thanh toán'),
+('tn002', 'P301', '96000', '2026-05-03', 'Chưa thanh toán');
 
 -- =====================================================
 -- KIỂM TRA KẾT QUẢ
