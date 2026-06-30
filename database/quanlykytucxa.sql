@@ -176,6 +176,11 @@ INSERT INTO suco (maphong, mota, ngaybao, trangthai) VALUES
 ('A202', 'Điều hoà không lạnh, cần kiểm tra gas',          '2026-06-05', 'Đang xử lý'),
 ('B103', 'Tường bị ẩm mốc sau mưa lớn',                    '2026-06-10', 'Chờ xử lý');
 
+-- 9. TIỀN NƯỚC
+INSERT INTO tiennuoc (matn, maphong, gianuoc, ngay, trangthai) VALUES
+('tn001', 'P201', '144000', '2026-04-19', 'Chưa thanh toán'),
+('tn002', 'P301', '96000', '2026-05-03', 'Chưa thanh toán');
+
 -- =====================================================
 -- KIỂM TRA KẾT QUẢ
 -- =====================================================
