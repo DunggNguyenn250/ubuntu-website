@@ -177,10 +177,10 @@ EXIT;
 
 Mở Chrome/Edge trên Windows và truy cập:
 
-| Mục đích               | URL                                                        |
-| ---------------------- | ---------------------------------------------------------- |
-| 🎓 Giao diện Sinh Viên | `http://192.168.1.10:8080/QuanLyKTX_user/`                 |
-| ⚙️ Hệ thống Admin/API  | `http://192.168.1.10:8080/QuanLyKTX_API/Public/auth/login` |
+| Mục đích               | URL                                          |
+| ---------------------- | -------------------------------------------- |
+| 🎓 Giao diện Sinh Viên | `http://192.168.190.128:8080/QuanLyKTX_user` |
+| ⚙️ Hệ thống Admin/API  | `http://192.168.190.128:8080/QuanLyKTX_API`  |
 
 ---
 
