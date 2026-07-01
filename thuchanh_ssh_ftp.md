@@ -1,7 +1,8 @@
-# Hướng dẫn Thực hành SSH và FTP — Dự án Quản Lý Ký Túc Xá
+﻿# Hướng dẫn Thực hành SSH và FTP — Dự án Quản Lý Ký Túc Xá
 
-> **Môi trường:** Ubuntu (VMware) + Docker | IP máy ảo: `192.168.1.10`
+> **Môi trường:** Ubuntu (VMware) + Docker | IP máy ảo: `192.168.1.43`
 > **Cấu trúc project trên server:** `/var/www/html/` (mount từ `~/ubuntu-website/`)
+>
 > ```
 > /var/www/html/
 > ├── QuanLyKTX_API/      ← Hệ thống Admin (quản lý phòng, SV, hợp đồng...)
@@ -22,6 +23,7 @@
 ## PHẦN 1: SSH — Các cấu hình cơ bản
 
 ### Bước chuẩn bị: Kiểm tra SSH đã chạy chưa
+
 ```bash
 sudo systemctl status ssh
 # Nếu chưa cài:
@@ -39,19 +41,22 @@ sudo nano /etc/ssh/sshd_config
 ```
 
 Tìm dòng `#Port 22`, sửa thành:
+
 ```text
 Port 2222
 ```
 
 Lưu file (`Ctrl+O` → Enter → `Ctrl+X`), sau đó khởi động lại:
+
 ```bash
 sudo systemctl restart ssh
 sudo ufw allow 2222/tcp
 ```
 
 **Kiểm tra từ máy Windows:**
+
 ```bash
-ssh dunggnguyenn@192.168.1.10 -p 2222
+ssh dunggnguyenn@192.168.1.43 -p 2222
 ```
 
 ---
@@ -70,9 +75,10 @@ groups dev_limited
 ```
 
 **Thử nghiệm:**
+
 ```bash
 # SSH vào với user này
-ssh dev_limited@192.168.1.10 -p 2222
+ssh dev_limited@192.168.1.43 -p 2222
 
 # Thử lệnh cần sudo → sẽ bị từ chối
 sudo apt install nano    # → Permission denied
@@ -101,8 +107,9 @@ groups dev_admin
 ```
 
 **Thử nghiệm:**
+
 ```bash
-ssh dev_admin@192.168.1.10 -p 2222
+ssh dev_admin@192.168.1.43 -p 2222
 
 # User này có thể làm mọi thứ
 sudo systemctl restart docker
@@ -118,6 +125,7 @@ sudo nano /etc/ssh/sshd_config
 ```
 
 Thêm vào **cuối file**:
+
 ```text
 # Chỉ cho phép 2 user này được SSH vào
 AllowUsers dunggnguyenn dev_admin
@@ -328,39 +336,45 @@ sudo systemctl restart vsftpd
 
 ## Bảng tổng hợp tất cả user
 
-| User | SSH | FTP Upload | FTP Download | Phạm vi FTP |
-|------|-----|-----------|--------------|-------------|
-| `dunggnguyenn` | ✅ Full quyền | ✅ | ✅ | Toàn bộ |
-| `dev_limited` | ✅ (không sudo) | — | — | — |
-| `dev_admin` | ✅ Full quyền (sudo) | — | — | — |
-| `ftp_full_access` | — | ✅ | ✅ | Toàn bộ |
-| `ftp_user_only` | — | ✅ | ✅ | 1 folder (chroot) |
-| `ftp_multi_folder` | — | ✅ | ✅ | Nhiều folder |
-| `ftp_readonly` | — | ❌ | ✅ | Toàn bộ |
-| `ftp_writeonly` | — | ✅ | ❌ | /upload only |
-| `ftp_superuser` | — | ✅ | ✅ | Toàn bộ |
+| User               | SSH                  | FTP Upload | FTP Download | Phạm vi FTP       |
+| ------------------ | -------------------- | ---------- | ------------ | ----------------- |
+| `dunggnguyenn`     | ✅ Full quyền        | ✅         | ✅           | Toàn bộ           |
+| `dev_limited`      | ✅ (không sudo)      | —          | —            | —                 |
+| `dev_admin`        | ✅ Full quyền (sudo) | —          | —            | —                 |
+| `ftp_full_access`  | —                    | ✅         | ✅           | Toàn bộ           |
+| `ftp_user_only`    | —                    | ✅         | ✅           | 1 folder (chroot) |
+| `ftp_multi_folder` | —                    | ✅         | ✅           | Nhiều folder      |
+| `ftp_readonly`     | —                    | ❌         | ✅           | Toàn bộ           |
+| `ftp_writeonly`    | —                    | ✅         | ❌           | /upload only      |
+| `ftp_superuser`    | —                    | ✅         | ✅           | Toàn bộ           |
 
 ---
 
 ## PHẦN 1: SSH — Các cấu hình cơ bản
 
 ### 1.1. Đổi port SSH
+
 Mặc định SSH dùng port 22, ta sẽ đổi sang một port khác (ví dụ: 2222) để tăng tính bảo mật.
 
 ```bash
 sudo nano /etc/ssh/sshd_config
 ```
+
 Tìm dòng có chữ `#Port 22`, bỏ dấu `#` và sửa thành:
+
 ```text
 Port 2222
 ```
+
 Sau đó khởi động lại dịch vụ SSH và mở tường lửa:
+
 ```bash
 sudo systemctl restart ssh
 sudo ufw allow 2222/tcp
 ```
 
 ### 1.2. Tạo người dùng không cho phép cài đặt (chỉ dùng môi trường hiện có)
+
 Để tạo một user bị giới hạn, ta chỉ cần tạo user bình thường và **không** cấp quyền `sudo`.
 
 ```bash
@@ -371,9 +385,11 @@ sudo adduser user_limited
 groups user_limited
 # Kết quả mong đợi: user_limited : user_limited (không có chữ sudo)
 ```
+
 **Giải thích:** User này có thể kết nối SSH vào server, chạy các lệnh cơ bản (`ls`, `cd`, `git`, v.v.) nhưng không thể dùng lệnh `sudo` (ví dụ: `sudo apt install`) để cài đặt phần mềm hay thay đổi hệ thống.
 
 ### 1.3. Tạo người dùng cho phép full quyền (tương tự root)
+
 Tạo user và cấp quyền `sudo` để user này có thể quản trị hệ thống.
 
 ```bash
@@ -389,12 +405,15 @@ groups user_admin
 ```
 
 ### 1.4. Cho phép / Cấm truy cập SSH
+
 Ta có thể cấu hình để chỉ cho phép một số user nhất định được phép SSH, hoặc cấm cụ thể ai đó.
 
 ```bash
 sudo nano /etc/ssh/sshd_config
 ```
+
 Thêm vào **cuối file** các cấu hình sau tùy mục đích:
+
 ```text
 # Chỉ cho phép các user này SSH vào:
 AllowUsers dunggnguyenn user_admin
@@ -402,7 +421,9 @@ AllowUsers dunggnguyenn user_admin
 # Hoặc nếu muốn cấm 1 user cụ thể:
 DenyUsers user_limited
 ```
+
 Sau đó khởi động lại SSH:
+
 ```bash
 sudo systemctl restart ssh
 ```
@@ -412,6 +433,7 @@ sudo systemctl restart ssh
 ## PHẦN 2: FTP — Các cấu hình cơ bản (sử dụng vsftpd)
 
 Trước tiên, cài đặt FTP server (`vsftpd`):
+
 ```bash
 sudo apt update
 sudo apt install vsftpd -y
@@ -423,24 +445,30 @@ sudo cp /etc/vsftpd.conf /etc/vsftpd.conf.bak
 ```
 
 ### 2.1. Tạo người dùng cho phép truy cập (download và upload file) [1]
+
 Mặc định vsftpd có thể chỉ cho download. Ta cần bật quyền ghi (write).
 
 ```bash
 sudo adduser ftp_user1
 sudo nano /etc/vsftpd.conf
 ```
+
 Tìm và sửa (hoặc thêm) các dòng sau:
+
 ```text
 write_enable=YES
 local_enable=YES
 chroot_local_user=NO
 ```
+
 Khởi động lại FTP:
+
 ```bash
 sudo systemctl restart vsftpd
 ```
 
 ### 2.2. Tạo người dùng cho phép như [1], nhưng chỉ trong 1 folder nào đấy
+
 Để nhốt (chroot) user vào thư mục cá nhân của họ, không cho đi lang thang ra các thư mục khác của hệ thống:
 
 ```bash
@@ -452,17 +480,22 @@ sudo chown ftp_user2:ftp_user2 /home/ftp_user2/ftp_folder
 
 sudo nano /etc/vsftpd.conf
 ```
+
 Thêm hoặc sửa cấu hình:
+
 ```text
 chroot_local_user=YES
 allow_writeable_chroot=YES
 ```
+
 Khởi động lại FTP:
+
 ```bash
 sudo systemctl restart vsftpd
 ```
 
 ### 2.3. Tạo người dùng cho phép như [1], nhưng trong nhiều hơn 1 folder nào đấy
+
 Để user có thể đi qua lại giữa nhiều thư mục, ta phải **tắt tính năng chroot**.
 
 ```bash
@@ -474,13 +507,17 @@ sudo chown ftp_user3:ftp_user3 /ftp_share/folder1 /ftp_share/folder2
 
 sudo nano /etc/vsftpd.conf
 ```
+
 Đảm bảo cấu hình là:
+
 ```text
 chroot_local_user=NO
 ```
-*(User này sẽ có thể truy cập `folder1`, `folder2` hoặc bất kỳ thư mục nào họ có quyền đọc/ghi).*
+
+_(User này sẽ có thể truy cập `folder1`, `folder2` hoặc bất kỳ thư mục nào họ có quyền đọc/ghi)._
 
 ### 2.4. Tạo người dùng chỉ cho phép download file, nhưng không được upload file
+
 Ta tạo user và thiết lập quyền `write_enable=NO` **riêng** cho user này.
 
 ```bash
@@ -499,6 +536,7 @@ sudo systemctl restart vsftpd
 ```
 
 ### 2.5. Tạo người dùng chỉ cho phép upload file, ko cho phép download file
+
 Cách thực hiện: Cấp quyền ghi trên thư mục nhưng **tắt quyền đọc**, kết hợp cấu hình `download_enable=NO`.
 
 ```bash
@@ -518,6 +556,7 @@ sudo systemctl restart vsftpd
 ```
 
 ### 2.6. Tạo người dùng có full quyền truy cập tất cả các folder
+
 Tạo user, cấp quyền `sudo` và đảm bảo vsftpd không giới hạn (chroot) user này.
 
 ```bash
@@ -530,7 +569,8 @@ download_enable=YES" | sudo tee /etc/vsftpd/user_conf/ftp_full
 
 sudo systemctl restart vsftpd
 ```
-*(Lưu ý: FTP user có full quyền hệ thống là một rủi ro bảo mật lớn).*
+
+_(Lưu ý: FTP user có full quyền hệ thống là một rủi ro bảo mật lớn)._
 
 ---
 
