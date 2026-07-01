@@ -18,8 +18,6 @@ DROP TABLE IF EXISTS taikhoan_user;
 DROP TABLE IF EXISTS sinhvien;
 DROP TABLE IF EXISTS phong;
 DROP TABLE IF EXISTS taikhoan_admin;
-DROP TABLE IF EXISTS tiendien;
-DROP TABLE IF EXISTS tiennuoc;
 
 -- =====================================================
 -- TẠO CẤU TRÚC BẢNG
@@ -88,6 +86,7 @@ CREATE TABLE thanhtoan (
 
 CREATE TABLE suco (
     masuco INT PRIMARY KEY AUTO_INCREMENT,
+    masv VARCHAR(20),
     maphong VARCHAR(20),
     mota TEXT,
     ngaybao DATE,
@@ -115,6 +114,8 @@ CREATE TABLE tiennuoc (
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (maphong) REFERENCES phong(maphong)
 );
+
+SET FOREIGN_KEY_CHECKS = 1;
 
 SET FOREIGN_KEY_CHECKS = 1;
 
@@ -165,14 +166,14 @@ INSERT INTO taikhoan_user (masv, password) VALUES
 
 -- 5. HỢP ĐỒNG
 INSERT INTO hopdong (mahopdong, masv, maphong, batdau, hethan, trangthai) VALUES
-('HD001', '74DCTT001', 'A101', '2025-09-01', '2026-06-30', 'Đang Hoạt Động'),
-('HD002', '74DCTT003', 'A101', '2025-09-01', '2026-06-30', 'Đang Hoạt Động'),
-('HD003', '74DCTT005', 'A103', '2025-09-01', '2026-06-30', 'Đang Hoạt Động'),
-('HD004', '74DCTT007', 'A202', '2025-09-01', '2026-06-30', 'Đang Hoạt Động'),
-('HD005', '74DCTT002', 'B101', '2025-09-01', '2026-06-30', 'Đang Hoạt Động'),
-('HD006', '74DCTT004', 'B101', '2025-09-01', '2026-06-30', 'Đang Hoạt Động'),
-('HD007', '74DCTT006', 'B201', '2025-09-01', '2026-06-30', 'Đang Hoạt Động'),
-('HD008', '74DCTT008', 'B201', '2025-09-01', '2026-06-30', 'Đang Hoạt Động');
+('HD001', '74DCTT001', 'A101', '2025-09-01', '2026-06-30', 'Còn hiệu lực'),
+('HD002', '74DCTT003', 'A101', '2025-09-01', '2026-06-30', 'Còn hiệu lực'),
+('HD003', '74DCTT005', 'A103', '2025-09-01', '2026-06-30', 'Còn hiệu lực'),
+('HD004', '74DCTT007', 'A202', '2025-09-01', '2026-06-30', 'Còn hiệu lực'),
+('HD005', '74DCTT002', 'B101', '2025-09-01', '2026-06-30', 'Còn hiệu lực'),
+('HD006', '74DCTT004', 'B101', '2025-09-01', '2026-06-30', 'Còn hiệu lực'),
+('HD007', '74DCTT006', 'B201', '2025-09-01', '2026-06-30', 'Còn hiệu lực'),
+('HD008', '74DCTT008', 'B201', '2025-09-01', '2026-06-30', 'Còn hiệu lực');
 
 -- 6. THANH TOÁN
 INSERT INTO thanhtoan (maphong, sotien, ngaytra, trangthai) VALUES
@@ -198,15 +199,15 @@ INSERT INTO suco (maphong, mota, ngaybao, trangthai) VALUES
 ('A202', 'Điều hoà không lạnh, cần kiểm tra gas',          '2026-06-05', 'Đang xử lý'),
 ('B103', 'Tường bị ẩm mốc sau mưa lớn',                    '2026-06-10', 'Chờ xử lý');
 
--- 8. TIỀN ĐIỆN
-INSERT INTO tiendien (maphong, giadien, ngay, trangthai) VALUES
-('A202', '553124', '2026-05-04', 'Chưa thanh toán'),
-('B101', '65016', '2026-05-04', 'Chưa thanh toán'),
-('B201', '1145203', '2026-05-04', 'Đã thanh toán');
+-- 8. TIỀN DIỆN
+INSERT INTO tiendien (matd, maphong, giadien, ngay, trangthai) VALUES
+('td001', 'P207', '553124', '2026-05-04', 'Chưa thanh toán'),
+('td002', 'P302', '65016', '2026-05-04', 'Chưa thanh toán'),
+('td003', 'P304', '1145203', '2026-05-04', 'Đã thanh toán');
 -- 9. TIỀN NƯỚC
-INSERT INTO tiennuoc (maphong, gianuoc, ngay, trangthai) VALUES
-('A201', '144000', '2026-04-19', 'Chưa thanh toán'),
-('B201', '96000', '2026-05-03', 'Chưa thanh toán');
+INSERT INTO tiennuoc (matn, maphong, gianuoc, ngay, trangthai) VALUES
+('tn001', 'P201', '144000', '2026-04-19', 'Chưa thanh toán'),
+('tn002', 'P301', '96000', '2026-05-03', 'Chưa thanh toán');
 
 -- =====================================================
 -- KIỂM TRA KẾT QUẢ
@@ -217,9 +218,7 @@ UNION ALL SELECT CONCAT('taikhoan_user: ', COUNT(*), ' bản ghi') FROM taikhoan
 UNION ALL SELECT CONCAT('phong: ', COUNT(*), ' bản ghi') FROM phong
 UNION ALL SELECT CONCAT('hopdong: ', COUNT(*), ' bản ghi') FROM hopdong
 UNION ALL SELECT CONCAT('thanhtoan: ', COUNT(*), ' bản ghi') FROM thanhtoan
-UNION ALL SELECT CONCAT('suco: ', COUNT(*), ' bản ghi') FROM suco
-UNION ALL SELECT CONCAT('tiendien: ', COUNT(*), ' bản ghi') FROM tiendien
-UNION ALL SELECT CONCAT('tiennuoc: ', COUNT(*), ' bản ghi') FROM tiennuoc;
+UNION ALL SELECT CONCAT('suco: ', COUNT(*), ' bản ghi') FROM suco;
 
 --
 DELIMITER $$
@@ -227,11 +226,7 @@ CREATE TRIGGER trg_hopdong_after_delete AFTER DELETE ON hopdong FOR EACH ROW BEG
     IF OLD.trangthai = 'Đang Hoạt Động' THEN
         UPDATE phong SET phonghientai = GREATEST(0, phonghientai - 1) WHERE maphong = OLD.maphong;
     END IF;
-    UPDATE phong SET trangthai = CASE 
-        WHEN phonghientai >= succhua THEN 'Đầy'
-        WHEN phonghientai = 0 THEN 'Trống'
-        ELSE 'Còn chỗ'
-    END WHERE maphong = OLD.maphong;
+    UPDATE phong SET trangthai = IF(phonghientai >= succhua, 'Đầy', 'Trống') WHERE maphong = OLD.maphong;
 END
 $$
 DELIMITER ;
@@ -240,11 +235,7 @@ CREATE TRIGGER trg_hopdong_after_insert AFTER INSERT ON hopdong FOR EACH ROW BEG
     IF NEW.trangthai = 'Đang Hoạt Động' THEN
         UPDATE phong SET phonghientai = phonghientai + 1 WHERE maphong = NEW.maphong;
     END IF;
-    UPDATE phong SET trangthai = CASE 
-        WHEN phonghientai >= succhua THEN 'Đầy'
-        WHEN phonghientai = 0 THEN 'Trống'
-        ELSE 'Còn chỗ'
-    END WHERE maphong = NEW.maphong;
+    UPDATE phong SET trangthai = IF(phonghientai >= succhua, 'Đầy', 'Trống') WHERE maphong = NEW.maphong;
 END
 $$
 DELIMITER ;
@@ -268,16 +259,8 @@ CREATE TRIGGER trg_hopdong_after_update AFTER UPDATE ON hopdong FOR EACH ROW BEG
     END IF;
 
     -- Cập nhật trạng thái
-    UPDATE phong SET trangthai = CASE 
-        WHEN phonghientai >= succhua THEN 'Đầy'
-        WHEN phonghientai = 0 THEN 'Trống'
-        ELSE 'Còn chỗ'
-    END WHERE maphong = OLD.maphong;
-    UPDATE phong SET trangthai = CASE 
-        WHEN phonghientai >= succhua THEN 'Đầy'
-        WHEN phonghientai = 0 THEN 'Trống'
-        ELSE 'Còn chỗ'
-    END WHERE maphong = NEW.maphong;
+    UPDATE phong SET trangthai = IF(phonghientai >= succhua, 'Đầy', 'Trống') WHERE maphong = OLD.maphong;
+    UPDATE phong SET trangthai = IF(phonghientai >= succhua, 'Đầy', 'Trống') WHERE maphong = NEW.maphong;
 END
 $$
 DELIMITER ;

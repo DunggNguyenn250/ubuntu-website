@@ -65,7 +65,7 @@
                                 <span style="color: #27ae60; padding: 3px 8px; font-weight: bold;">Còn chỗ</span>
                             <?php else: ?>
                                 <span style="color: #e74c3c; padding: 3px 8px; font-weight: bold;"><?= htmlspecialchars($r['trangthai']) ?></span>
-                            <?php endif; ?>
+                            <?php endif; ?>`
                         </td>
                         <td>
                             <div class="action-links">
