@@ -98,6 +98,12 @@ CREATE TABLE tiendien (
     matd INT PRIMARY KEY AUTO_INCREMENT,
     maphong VARCHAR(20),
     giadien VARCHAR(20),
+    ngaytra DATE,
+    trangthai VARCHAR(20),
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (maphong) REFERENCES phong(maphong)
+);
+
 CREATE TABLE tiennuoc (
     matn INT PRIMARY KEY AUTO_INCREMENT,
     maphong VARCHAR(20),
@@ -107,6 +113,8 @@ CREATE TABLE tiennuoc (
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (maphong) REFERENCES phong(maphong)
 );
+
+SET FOREIGN_KEY_CHECKS = 1;
 
 SET FOREIGN_KEY_CHECKS = 1;
 
