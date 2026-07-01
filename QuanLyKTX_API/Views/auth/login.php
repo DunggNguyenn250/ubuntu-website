@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="vi">
 <head>
     <meta charset="UTF-8">
@@ -53,7 +53,7 @@
         </form>
 
         <div class="login-footer">
-            <p>Bạn là Sinh viên? <a href="http://192.168.190.128:8080/QuanLyKTX_user/">Đăng nhập Cổng Sinh Viên</a></p>
+            <p>Bạn là Sinh viên? <a href="http://192.168.1.10:8080/QuanLyKTX_user/">Đăng nhập Cổng Sinh Viên</a></p>
         </div>
     </div>
 </body>

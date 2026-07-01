@@ -1,11 +1,11 @@
-<?php
+﻿<?php
 /**
  * Auth Repository
  * Data Access Layer cho Authentication
  */
 
 class AuthModel {
-    private $apiUrl = 'http://192.168.190.128:8080/QuanLyKTX_API/Routes/apiUser.php';
+    private $apiUrl = 'http://192.168.1.10:8080/QuanLyKTX_API/Routes/apiUser.php';
 
     public function authenticate($masv, $password) {
         $url = $this->apiUrl . '?action=login';

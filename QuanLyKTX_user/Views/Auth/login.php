@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="vi">
 <head>
     <meta charset="UTF-8">
@@ -30,7 +30,7 @@
         
         <div class="footer-link">
             Bạn là Quản trị viên (Admin)? <br>
-            <a href="http://192.168.190.128:8080/QuanLyKTX_API/Public/auth/login">Đăng nhập tại Cổng Quản Lý</a>
+            <a href="http://192.168.1.10:8080/QuanLyKTX_API/Public/auth/login">Đăng nhập tại Cổng Quản Lý</a>
         </div>
     </div>
 </body>

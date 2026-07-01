@@ -1,11 +1,11 @@
-<?php
+﻿<?php
 /**
  * Room Model
  * Xử lý business logic và database operations cho Phòng
  */
 
 class RoomModel {
-    private $apiUrl = 'http://192.168.190.128:8080/QuanLyKTX_API/Routes/apiUser.php';
+    private $apiUrl = 'http://192.168.1.10:8080/QuanLyKTX_API/Routes/apiUser.php';
     public function timphong(){
         if (session_status() === PHP_SESSION_NONE) {
             session_start();
