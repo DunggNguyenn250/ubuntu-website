@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 /**
  * Incident Model
  * Xử lý business logic và database operations cho Sự Cố

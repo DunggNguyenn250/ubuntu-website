@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 
 class ContractModel {
     private $apiUrl = 'http://192.168.1.10:8080/QuanLyKTX_API/Routes/apiUser.php';

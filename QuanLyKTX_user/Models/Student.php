@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 /**
  * Student Model
  * Xử lý business logic liên quan đến sinh viên

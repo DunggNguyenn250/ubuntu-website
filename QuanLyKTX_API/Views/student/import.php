@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 /**
  * Student Import View
  */

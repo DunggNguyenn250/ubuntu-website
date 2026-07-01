@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 /**
  * Room Model
  * Xử lý business logic và database operations cho Phòng

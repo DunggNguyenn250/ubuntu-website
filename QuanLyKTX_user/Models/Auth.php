@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 /**
  * Auth Repository
  * Data Access Layer cho Authentication

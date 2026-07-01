@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 if (!isset($_SESSION['user_id'])) { header('Location: ../../index.php'); exit; }
 if (!defined('BASE_URL')) { define('BASE_URL', 'http://192.168.1.10:8080/QuanLyKTX_API/Public/'); }
 ?>
