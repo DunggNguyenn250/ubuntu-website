@@ -4,25 +4,70 @@ Tài liệu này hướng dẫn chi tiết các bước để thực hiện yêu
 
 ---
 
+# Cách để lấy đung IP Host-only để kết nối
+
+    ```bash
+        hostname -I
+    ```
+
+Bạn nhìn vào kết quả, sẽ thấy máy ảo bây giờ có 2 địa chỉ IP khác nhau (tương ứng với 2 card mạng bạn đã bật):
+
+Một IP dùng để ra mạng (bỏ qua cái này).
+
+Một IP thường có đầu số là 192.168.56.x (nếu dùng VirtualBox) hoặc dải khác tương tự. Đây chính là IP của card Host-only.
+
 ## PHẦN 1: SSH — Các cấu hình cơ bản
 
 ### 1.1. Đổi port SSH
+
 Mặc định SSH dùng port 22, ta sẽ đổi sang một port khác (ví dụ: 2222) để tăng tính bảo mật.
 
 ```bash
 sudo nano /etc/ssh/sshd_config
 ```
+
 Tìm dòng có chữ `#Port 22`, bỏ dấu `#` và sửa thành:
+
 ```text
 Port 2222
 ```
+
 Sau đó khởi động lại dịch vụ SSH và mở tường lửa:
+
 ```bash
 sudo systemctl restart ssh
 sudo ufw allow 2222/tcp
 ```
 
+    Nếu bạn đổi port trong file cấu hình thành 2222 nhưng quên chạy lệnh sudo ufw allow 2222/tcp, thì ngay sau khi bạn khởi động lại SSH, tường lửa sẽ chặn đứng cổng 2222 lại và bạn sẽ bị ngắt kết nối hoàn toàn khỏi server (bị lỗi Connection refused hoặc Timeout).
+
+# Cách 1: Chỉ liệt kê các tài khoản do con người tạo ra (Khuyên dùng)
+
+Mặc định khi bạn tạo một tài khoản thông thường trên Ubuntu, hệ thống sẽ cấp cho tài khoản đó một ID (gọi là UID) bắt đầu từ 1000 trở đi. Lệnh này sẽ lọc ra chính xác những tài khoản này:
+
+```bash
+awk -F: '$3 >= 1000 && $3 != 65534 {print $1}' /etc/passwd
+
+```
+
+# Trường hợp 1: Đăng nhập bằng tài khoản Quản trị (dunggnguyenn)
+
+Tài khoản này có toàn quyền (nằm trong nhóm sudo). Bạn dùng lệnh này từ máy thật:
+
+```bash
+ ssh dunggnguyenn@192.168.190.128 -p 2222
+```
+
+# Trường hợp 2: Đăng nhập bằng tài khoản Giới hạn (user_limited)
+
+Tài khoản này chỉ dùng để xem code hoặc chạy lệnh cơ bản, không có quyền admin.
+
+```bash
+ ssh user_limited@192.168.190.128 -p 2222
+```
+
 ### 1.2. Tạo người dùng không cho phép cài đặt (chỉ dùng môi trường hiện có)
+
 Để tạo một user bị giới hạn, ta chỉ cần tạo user bình thường và **không** cấp quyền `sudo`.
 
 ```bash
@@ -33,9 +78,33 @@ sudo adduser user_limited
 groups user_limited
 # Kết quả mong đợi: user_limited : user_limited (không có chữ sudo)
 ```
+
 **Giải thích:** User này có thể kết nối SSH vào server, chạy các lệnh cơ bản (`ls`, `cd`, `git`, v.v.) nhưng không thể dùng lệnh `sudo` (ví dụ: `sudo apt install`) để cài đặt phần mềm hay thay đổi hệ thống.
 
+# Nhóm lệnh quản lý File và Thư mục (Thao tác cơ bản)
+
+Đây là những lệnh để di chuyển và quản lý dữ liệu.
+
+# pwd (Print Working Directory): Xem mình đang đứng ở thư mục nào.
+
+# cd (Change Directory): Di chuyển qua lại giữa các thư mục.
+
+Ví dụ: cd ~ để về ngay thư mục nhà của mình. User thường có thể cd /etc (thư mục hệ thống) để vào xem, nhưng không thể tạo file trong đó.
+
+# ls (List): Liệt kê các file và thư mục con. Thường dùng ls -la để xem cả file ẩn và quyền hạn (permissions) của file.
+
+# mkdir (Make Directory) & touch: Tạo thư mục mới hoặc tạo một file rỗng.
+
+Giới hạn: Chỉ chạy được trong /home/tên_user hoặc thư mục /tmp (thư mục tạm). Nếu gõ mkdir /test_folder ở thư mục gốc, hệ thống sẽ báo ngay: Permission denied.
+
+# cp (Copy) & mv (Move/Rename): Sao chép hoặc di chuyển/đổi tên file.
+
+# rm (Remove): Xóa file hoặc thư mục (rm -rf).
+
+⚠️ Cảnh báo an toàn: User thường chỉ xóa được file do chính họ tạo ra hoặc file họ có quyền sở hữu. Họ không thể gõ rm -rf / để xóa sạch hệ điều hành được (lệnh này bắt buộc phải có sudo).
+
 ### 1.3. Tạo người dùng cho phép full quyền (tương tự root)
+
 Tạo user và cấp quyền `sudo` để user này có thể quản trị hệ thống.
 
 ```bash
@@ -51,12 +120,15 @@ groups user_admin
 ```
 
 ### 1.4. Cho phép / Cấm truy cập SSH
+
 Ta có thể cấu hình để chỉ cho phép một số user nhất định được phép SSH, hoặc cấm cụ thể ai đó.
 
 ```bash
 sudo nano /etc/ssh/sshd_config
 ```
+
 Thêm vào **cuối file** các cấu hình sau tùy mục đích:
+
 ```text
 # Chỉ cho phép các user này SSH vào:
 AllowUsers dunggnguyenn user_admin
@@ -64,7 +136,15 @@ AllowUsers dunggnguyenn user_admin
 # Hoặc nếu muốn cấm 1 user cụ thể:
 DenyUsers user_limited
 ```
+
+# Ấn Ctrl + O (để thực hiện lệnh ghi file - WriteOut).
+
+# Ấn phím Enter để xác nhận lưu vào file /etc/ssh/sshd_config.
+
+# Ấn Ctrl + X để thoát màn hình nano quay về lại Terminal.
+
 Sau đó khởi động lại SSH:
+
 ```bash
 sudo systemctl restart ssh
 ```
@@ -74,6 +154,7 @@ sudo systemctl restart ssh
 ## PHẦN 2: FTP — Các cấu hình cơ bản (sử dụng vsftpd)
 
 Trước tiên, cài đặt FTP server (`vsftpd`):
+
 ```bash
 sudo apt update
 sudo apt install vsftpd -y
@@ -85,24 +166,30 @@ sudo cp /etc/vsftpd.conf /etc/vsftpd.conf.bak
 ```
 
 ### 2.1. Tạo người dùng cho phép truy cập (download và upload file) [1]
+
 Mặc định vsftpd có thể chỉ cho download. Ta cần bật quyền ghi (write).
 
 ```bash
 sudo adduser ftp_user1
 sudo nano /etc/vsftpd.conf
 ```
+
 Tìm và sửa (hoặc thêm) các dòng sau:
+
 ```text
 write_enable=YES
 local_enable=YES
 chroot_local_user=NO
 ```
+
 Khởi động lại FTP:
+
 ```bash
 sudo systemctl restart vsftpd
 ```
 
 ### 2.2. Tạo người dùng cho phép như [1], nhưng chỉ trong 1 folder nào đấy
+
 Để nhốt (chroot) user vào thư mục cá nhân của họ, không cho đi lang thang ra các thư mục khác của hệ thống:
 
 ```bash
@@ -114,17 +201,22 @@ sudo chown ftp_user2:ftp_user2 /home/ftp_user2/ftp_folder
 
 sudo nano /etc/vsftpd.conf
 ```
+
 Thêm hoặc sửa cấu hình:
+
 ```text
 chroot_local_user=YES
 allow_writeable_chroot=YES
 ```
+
 Khởi động lại FTP:
+
 ```bash
 sudo systemctl restart vsftpd
 ```
 
 ### 2.3. Tạo người dùng cho phép như [1], nhưng trong nhiều hơn 1 folder nào đấy
+
 Để user có thể đi qua lại giữa nhiều thư mục, ta phải **tắt tính năng chroot**.
 
 ```bash
@@ -136,13 +228,17 @@ sudo chown ftp_user3:ftp_user3 /ftp_share/folder1 /ftp_share/folder2
 
 sudo nano /etc/vsftpd.conf
 ```
+
 Đảm bảo cấu hình là:
+
 ```text
 chroot_local_user=NO
 ```
-*(User này sẽ có thể truy cập `folder1`, `folder2` hoặc bất kỳ thư mục nào họ có quyền đọc/ghi).*
+
+_(User này sẽ có thể truy cập `folder1`, `folder2` hoặc bất kỳ thư mục nào họ có quyền đọc/ghi)._
 
 ### 2.4. Tạo người dùng chỉ cho phép download file, nhưng không được upload file
+
 Ta tạo user và thiết lập quyền `write_enable=NO` **riêng** cho user này.
 
 ```bash
@@ -161,6 +257,7 @@ sudo systemctl restart vsftpd
 ```
 
 ### 2.5. Tạo người dùng chỉ cho phép upload file, ko cho phép download file
+
 Cách thực hiện: Cấp quyền ghi trên thư mục nhưng **tắt quyền đọc**, kết hợp cấu hình `download_enable=NO`.
 
 ```bash
@@ -180,6 +277,7 @@ sudo systemctl restart vsftpd
 ```
 
 ### 2.6. Tạo người dùng có full quyền truy cập tất cả các folder
+
 Tạo user, cấp quyền `sudo` và đảm bảo vsftpd không giới hạn (chroot) user này.
 
 ```bash
@@ -192,7 +290,8 @@ download_enable=YES" | sudo tee /etc/vsftpd/user_conf/ftp_full
 
 sudo systemctl restart vsftpd
 ```
-*(Lưu ý: FTP user có full quyền hệ thống là một rủi ro bảo mật lớn).*
+
+_(Lưu ý: FTP user có full quyền hệ thống là một rủi ro bảo mật lớn)._
 
 ---
 

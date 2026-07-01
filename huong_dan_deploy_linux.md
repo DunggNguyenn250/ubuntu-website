@@ -103,14 +103,14 @@ newgrp docker   # Áp dụng ngay không cần logout
 cd ~/webktx
 
 # Build image và khởi động tất cả services (chạy ở background)
-docker compose up --build -d
+sudo docker compose up --build -d
 ```
 
 Lần đầu sẽ mất vài phút để tải image. Sau đó kiểm tra:
 
 ```bash
 # Xem các container đang chạy
-docker compose ps
+sudo docker compose ps
 
 # Kết quả mong đợi:
 # NAME              STATUS          PORTS
