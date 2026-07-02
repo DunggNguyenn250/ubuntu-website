@@ -425,13 +425,13 @@ ALTER TABLE `thanhtoan`
 -- AUTO_INCREMENT cho bảng `tiendien`
 --
 ALTER TABLE `tiendien`
-  MODIFY `matd` varchar(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `matd` varchar(20) NOT NULL;
 
 --
 -- AUTO_INCREMENT cho bảng `tiennuoc`
 --
 ALTER TABLE `tiennuoc`
-  MODIFY `matn` varchar(20) NOT NULL AUTO_INCREMENT;
+  MODIFY `matn` varchar(20) NOT NULL;
 
 --
 -- Các ràng buộc cho các bảng đã đổ
