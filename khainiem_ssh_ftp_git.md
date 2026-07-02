@@ -235,3 +235,126 @@ Nhóm 5: Quản lý nhánh
     // Cụm từ origin/ đại diện cho "Phản chiếu của GitHub dưới máy bạn". Khi bạn thấy origin/feature, đó là nhánh feature đang nằm trên GitHub do người khác đẩy lên.
 
 ```
+
+## 4. Docker là gì và dùng để làm gì?
+
+# Docker là gì?
+
+```bash
+Docker là một nền tảng mã nguồn mở cho phép các lập trình viên "đóng gói" toàn bộ ứng dụng cùng với tất cả các môi trường, thư viện, cấu hình đi kèm thành một khối độc lập duy nhất gọi là Container.
+
+Nếu ví ứng dụng của bạn là hàng hóa, thì Docker chính là những chiếc thùng Container tiêu chuẩn. Bất kể bên trong thùng chứa cái gì (Website PHP, database MySQL, hay ứng dụng Java), nó đều có thể xếp lên mọi loại "tàu chở hàng" (máy tính Windows, Mac, hay Server Ubuntu) và chạy ngay lập tức mà không sợ bị đổ vỡ hay kén chọn môi trường.
+```
+
+# Docker dùng để làm gì?
+
+```bash
+    Giải quyết bài toán "Máy tôi chạy được nhưng máy bạn thì không": Khi làm bài tập nhóm, việc bạn cài MySQL bản 8.0, bạn kia cài bản 5.7 rất dễ gây lỗi code. Docker giúp cả nhóm dùng chung 1 Container duy nhất, đảm bảo môi trường ở mọi máy giống nhau 100%.
+
+    Cô lập ứng dụng (Isolation): Mỗi Container chạy trong một không gian hoàn toàn độc lập. Nếu ứng dụng web của bạn bị lỗi hoặc bị virus tấn công, nó chỉ sập bên trong container đó chứ không thể làm hỏng hệ điều hành của máy thật.
+
+    Cài đặt mọi thứ trong 1 giây: Thay vì mất nửa ngày để lên mạng tải, cấu hình và cài đặt một phần mềm phức tạp như MySQL hay WordPress, với Docker bạn chỉ cần gõ đúng 1 dòng lệnh, hệ thống sẽ tự tải về và chạy mượt mà sau vài giây.
+
+    Tiết kiệm tài nguyên: Khác với Máy ảo (Virtual Machine như VMware, VirtualBox) phải chạy nguyên một hệ điều hành ảo rất nặng, Docker Container dùng chung nhân với hệ điều hành máy thật nên cực kỳ nhẹ, bật tắt chỉ mất 1-2 giây và tốn rất ít RAM.
+```
+
+# Các khái niệm cốt lõi cần nhớ trước khi gõ lệnh\
+
+```bash
+    Docker Image (Cái khuôn): Giống như một chiếc đĩa cài đặt phần mềm hoặc một "công thức nấu ăn" được đóng gói sẵn và lưu trữ trên mạng (Docker Hub). Nó ở trạng thái tĩnh (không chạy).
+
+    Docker Container (Sản phẩm thực tế): Là một thực thể hoạt động được sinh ra từ Docker Image. Bạn có thể hiểu Image là "bản vẽ ngôi nhà", còn Container là "ngôi nhà thực tế" mà bạn có thể chui vào ở.
+```
+
+# Các lệnh Docker cơ bản
+
+Nhóm 1: Quản lý "Khuôn mẫu" (Docker Image)
+
+```bash
+    docker pull <tên_image>
+
+    // Mục đích: Tải Image từ Docker Hub về máy local. Ví dụ: docker pull mysql:5.7 hoặc docker pull wordpress. Đây giống như hành động tải file cài đặt (.exe, .dmg) về máy trước khi cài đặt.
+
+    docker images
+
+    // Mục đích: Liệt kê tất cả các Image đã được tải về máy tính của bạn. Bạn sẽ thấy tên Image, phiên bản (Tag), và dung lượng.
+
+    docker rmi <tên_image_hoặc_id>
+
+    // Mục đích: Xóa Image khỏi máy tính để giải phóng dung lượng. Bạn có thể dùng tên (ví dụ: rmi mysql:5.7) hoặc ID (mã số ngắn gọn hiển thị trong cột IMAGE ID).
+```
+
+Nhóm 2: Quản lý "Thùng chứa" (Docker Container)
+
+```bash
+    docker run -d --name <tên_container> -p <cổng_máy_thật>:<cổng_bên_trong> -e <BIẾN_MÔI_TRƯỜNG>=<giá_trị> <tên_image>
+
+    // Mục đích: Đây là lệnh quan trọng nhất, dùng để "Bật" (chạy) một Container từ Image. Hãy bẻ nhỏ lệnh này như sau:
+
+    -d (Detached Mode): Chạy nền (không làm treo máy).
+    --name: Đặt tên cho Container để dễ quản lý (ví dụ: my-mysql-5-7).
+    -p: Mở cổng (Port Mapping). Ví dụ: 8080:80 nghĩa là bạn có thể truy cập vào Container ở cổng 8080 trên máy tính của mình.
+    -e: Thiết lập Biến môi trường (Environment Variables). Ví dụ: -e MYSQL_ROOT_PASSWORD=123456 để đặt mật khẩu cho MySQL ngay lúc khởi tạo.
+    <tên_image>: Nguồn gốc để tạo ra Container này (ví dụ: mysql:5.7).
+
+
+    docker ps
+
+    // Mục đích: Liệt kê các Container đang chạy (Active). Nếu không thấy gì, nghĩa là không có Container nào đang chạy cả.
+
+    docker ps -a
+
+    // Mục đích: Liệt kê TẤT CẢ Container, bao gồm cả những Container đã tắt (Exited). Điều này rất hữu ích để xem lại các Container bạn đã tạo trước đó.
+
+    docker stop <tên_container_hoặc_id>
+
+    // Mục đích: Tắt (Stop) một Container đang chạy. Dữ liệu bên trong vẫn được giữ nguyên, giống như tắt máy tính thông thường.
+
+    docker start <tên_container_hoặc_id>
+
+    // Mục đích: Bật (Start) lại một Container đã bị tắt.
+
+    docker restart <tên_container_hoặc_id>
+
+    // Mục đích: Khởi động lại Container (Tắt rồi Bật lại).
+
+    docker rm <tên_container_hoặc_id>
+
+    // Mục đích: Xóa Container vĩnh viễn. Lưu ý: Bạn phải tắt Container trước khi có thể xóa nó.
+
+    docker logs <tên_container_hoặc_id>
+
+    // Mục đích: Xem nhật ký (Log) của Container. Ví dụ, khi bạn muốn xem lỗi của website, bạn dùng lệnh này để xem dòng lỗi cuối cùng.
+
+    docker compose up --build -d
+
+    // Mục đích: Đây là lệnh "đũa thần" của Docker. Khi bạn có một file docker-compose.yml định nghĩa sẵn nhiều Container (ví dụ: Web + Database + phpMyAdmin), lệnh này sẽ:
+
+    Build: Biên dịch Image (nếu cần).
+    Up: Bật tất cả các Container lên cùng lúc.
+    -d: Chạy ở chế độ nền.
+```
+
+Nhóm 3: Tương tác và kiểm tra sâu bên trong Container
+
+```bash
+    docker exec -it <tên_container> <tên_lệnh>
+
+    // Mục đích: Chạy một lệnh bên trong Container đang hoạt động.
+
+    -it: (Interactive Terminal) Giúp bạn tương tác trực tiếp với Container.
+    <tên_container>: Container bạn muốn chui vào (ví dụ: my-mysql-5-7).
+    <tên_lệnh>: Lệnh bạn muốn chạy. Ví dụ phổ biến nhất để vào sâu bên trong là: bash
+
+    // Ví dụ: Nếu bạn muốn vào bên trong container MySQL để kiểm tra file hoặc gõ lệnh mysql trực tiếp:
+
+    docker exec -it my-mysql-5-7 bash
+    (Lúc này Terminal của bạn sẽ chuyển sang giao diện của Linux bên trong Container)
+
+    docker logs <tên_container>
+
+    // Mục đích: Xem nhật ký (Log) của Container. Ví dụ, khi bạn muốn xem lỗi của website, bạn dùng lệnh này để xem dòng lỗi cuối cùng.
+
+    docker exec -it <tên_container> bash
+
+```
