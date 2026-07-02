@@ -1,6 +1,6 @@
 # 🐧 Hướng dẫn Deploy QuanLyKTX lên Ubuntu + Docker
 
-> **Mục tiêu:** Máy ảo Ubuntu chạy Docker làm máy chủ. Máy thật Windows truy cập qua IP nội bộ `192.168.190.128:8080`.
+> **Mục tiêu:** Máy ảo Ubuntu chạy Docker làm máy chủ. Máy thật Windows truy cập qua IP nội bộ `192.168.23.128:8080`.
 
 ---
 
@@ -9,7 +9,7 @@
 ```
 ┌─────────────────────────────────────┐
 │     Máy thật Windows (Client)       │
-│  Chrome → 192.168.190.128:8080/...  │
+│  Chrome → 192.168.23.128:8080/...  │
 └──────────────────┬──────────────────┘
                    │ Mạng nội bộ (VMware NAT/Bridged)
 ┌──────────────────▼──────────────────┐
@@ -36,8 +36,8 @@ ip addr show
 hostname -I
 ```
 
-> Tìm dòng có địa chỉ như `192.168.190.128` — đây là IP bạn sẽ dùng từ Windows.
-> Nếu IP khác với `192.168.190.128`, cần cập nhật lại file cấu hình trong code.
+> Tìm dòng có địa chỉ như `192.168.23.128` — đây là IP bạn sẽ dùng từ Windows.
+> Nếu IP khác với `192.168.23.128`, cần cập nhật lại file cấu hình trong code.
 
 ---
 
@@ -179,8 +179,8 @@ Mở Chrome/Edge trên Windows và truy cập:
 
 | Mục đích               | URL                                          |
 | ---------------------- | -------------------------------------------- |
-| 🎓 Giao diện Sinh Viên | `http://192.168.190.128:8080/QuanLyKTX_user` |
-| ⚙️ Hệ thống Admin/API  | `http://192.168.190.128:8080/QuanLyKTX_API`  |
+| 🎓 Giao diện Sinh Viên | `http://192.168.23.128:8080/QuanLyKTX_user` |
+| ⚙️ Hệ thống Admin/API  | `http://192.168.23.128:8080/QuanLyKTX_API`  |
 
 ---
 
@@ -190,7 +190,7 @@ Mở Chrome/Edge trên Windows và truy cập:
 
 ```bash
 # 1. Ping từ Windows kiểm tra mạng
-ping 192.168.190.128
+ping 192.168.23.128
 
 # 2. Nếu không ping được → vào VMware:
 #    Settings → Network Adapter → chọn "Bridged" hoặc "NAT"
@@ -279,11 +279,11 @@ docker exec -it ktx_apache_web bash
 
 ## ✅ Checklist hoàn thành
 
-- [ ] Ubuntu có IP `192.168.190.128` (hoặc IP tương tự)
+- [ ] Ubuntu có IP `192.168.23.128` (hoặc IP tương tự)
 - [ ] Docker và Docker Compose đã cài
 - [ ] Đã clone code từ GitHub vào `~/webktx`
 - [ ] `docker compose up --build -d` chạy thành công
 - [ ] `docker compose ps` hiển thị 2 container `Up`
 - [ ] Firewall đã mở cổng `8080`
-- [ ] Từ Windows, `ping 192.168.190.128` thành công
-- [ ] Truy cập `http://192.168.190.128:8080/QuanLyKTX_user` mở được trang web
+- [ ] Từ Windows, `ping 192.168.23.128` thành công
+- [ ] Truy cập `http://192.168.23.128:8080/QuanLyKTX_user` mở được trang web
