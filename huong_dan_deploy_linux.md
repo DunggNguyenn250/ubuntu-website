@@ -152,6 +152,18 @@ sudo ufw status | grep 8080
 
 ## 🔧 BƯỚC 8: Nhập dữ liệu Database (SQL)
 
+# Bước 1: Xóa database cũ (nếu có) (quanlykytucxa)
+
+```bash
+  sudo docker exec -i ktx_mysql_db mysql -u root -proot_password -e "DROP DATABASE IF EXISTS quanlykytucxa;"
+```
+
+# Bước 2: Tạo lại database
+
+```bash
+  sudo docker exec -i ktx_mysql_db mysql -u root -proot_password -e "CREATE DATABASE quanlykytucxa;"
+```
+
 Database MySQL vừa tạo sẽ trống. Cần import file SQL:
 
 ```bash

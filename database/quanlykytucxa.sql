@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Máy chủ: 127.0.0.1:3307
--- Thời gian đã tạo: Th7 01, 2026 lúc 10:58 AM
+-- Thời gian đã tạo: Th7 02, 2026 lúc 12:46 PM
 -- Phiên bản máy phục vụ: 10.4.32-MariaDB
 -- Phiên bản PHP: 8.2.12
 
@@ -285,7 +285,7 @@ INSERT INTO `thanhtoan` (`mathanhtoan`, `maphong`, `sotien`, `ngaytra`, `trangth
 --
 
 CREATE TABLE `tiendien` (
-  `matd` varchar(20) NOT NULL,
+  `matd` int(11) NOT NULL,
   `maphong` varchar(20) NOT NULL,
   `giadien` varchar(20) DEFAULT NULL,
   `ngay` date NOT NULL,
@@ -297,7 +297,8 @@ CREATE TABLE `tiendien` (
 --
 
 INSERT INTO `tiendien` (`matd`, `maphong`, `giadien`, `ngay`, `trangthai`) VALUES
-('TD001', 'D102', '183600', '2026-06-28', 'Đã thanh toán');
+(1, 'D102', '183600', '2026-06-28', 'Đã thanh toán'),
+(2, 'P101', '493086', '2026-07-02', 'Chưa thanh toán');
 
 -- --------------------------------------------------------
 
@@ -306,7 +307,7 @@ INSERT INTO `tiendien` (`matd`, `maphong`, `giadien`, `ngay`, `trangthai`) VALUE
 --
 
 CREATE TABLE `tiennuoc` (
-  `matn` varchar(20) NOT NULL,
+  `matn` int(11) NOT NULL,
   `maphong` varchar(20) NOT NULL,
   `gianuoc` varchar(20) DEFAULT NULL,
   `ngay` date NOT NULL,
@@ -425,12 +426,14 @@ ALTER TABLE `thanhtoan`
 -- AUTO_INCREMENT cho bảng `tiendien`
 --
 ALTER TABLE `tiendien`
-  MODIFY `matd` varchar(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `matd` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+
 --
 -- AUTO_INCREMENT cho bảng `tiennuoc`
 --
 ALTER TABLE `tiennuoc`
-  MODIFY `matn` varchar(20) NOT NULL AUTO_INCREMENT;
+  MODIFY `matn` int(11) NOT NULL AUTO_INCREMENT;
+
 --
 -- Các ràng buộc cho các bảng đã đổ
 --
