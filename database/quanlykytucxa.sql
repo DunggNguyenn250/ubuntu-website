@@ -285,7 +285,7 @@ INSERT INTO `thanhtoan` (`mathanhtoan`, `maphong`, `sotien`, `ngaytra`, `trangth
 --
 
 CREATE TABLE `tiendien` (
-  `matd` int(11) NOT NULL,
+  `matd` varchar(20) NOT NULL,
   `maphong` varchar(20) NOT NULL,
   `giadien` varchar(20) DEFAULT NULL,
   `ngay` date NOT NULL,
@@ -297,8 +297,8 @@ CREATE TABLE `tiendien` (
 --
 
 INSERT INTO `tiendien` (`matd`, `maphong`, `giadien`, `ngay`, `trangthai`) VALUES
-(1, 'D102', '183600', '2026-06-28', 'Đã thanh toán'),
-(2, 'P101', '493086', '2026-07-02', 'Chưa thanh toán');
+('TD001', 'D102', '183600', '2026-06-28', 'Đã thanh toán'),
+('TD002', 'P101', '493086', '2026-07-02', 'Chưa thanh toán');
 
 -- --------------------------------------------------------
 
@@ -307,7 +307,7 @@ INSERT INTO `tiendien` (`matd`, `maphong`, `giadien`, `ngay`, `trangthai`) VALUE
 --
 
 CREATE TABLE `tiennuoc` (
-  `matn` int(11) NOT NULL,
+  `matn` varchar(20) NOT NULL,
   `maphong` varchar(20) NOT NULL,
   `gianuoc` varchar(20) DEFAULT NULL,
   `ngay` date NOT NULL,
@@ -423,16 +423,12 @@ ALTER TABLE `thanhtoan`
   MODIFY `mathanhtoan` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
--- AUTO_INCREMENT cho bảng `tiendien`
+-- (matd là VARCHAR nên không dùng AUTO_INCREMENT)
 --
-ALTER TABLE `tiendien`
-  MODIFY `matd` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
--- AUTO_INCREMENT cho bảng `tiennuoc`
+-- (matn là VARCHAR nên không dùng AUTO_INCREMENT)
 --
-ALTER TABLE `tiennuoc`
-  MODIFY `matn` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- Các ràng buộc cho các bảng đã đổ
